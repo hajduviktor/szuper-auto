@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Szuper Autófelvásárlás – Eladnád? Mi visszük!</title>
+<meta name="description" content="Adj el autódat gyorsan és egyszerűen! Töltsd ki az űrlapot, küldd el a képeket, és felvesszük veled a kapcsolatot a legjobb ajánlattal.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Szuper Autófelvásárlás – Eladnád? Mi visszük!">
+<meta property="og:description" content="Töltsd ki az űrlapot, és perceken belül ajánlatot adunk az autódra!">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,900;1,900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* =============================================
+   SZUPER AUTÓFELVÁSÁRLÁS — design tokens
+   Yellow #FAC810 · Red #E8030F · Black #0D0D0D · White #FAFAFA
+   Typeface: Barlow Condensed (impact headlines) + Barlow (body/form)
+   Layout: single-column, mobile-first, max 600px form
+   ============================================= */
+:root{
+  --yellow: #FAC810;
+  --yellow-dark: #D9A800;
+  --red: #E8030F;
+  --red-dark: #B80009;
+  --ink: #0D0D0D;
+  --white: #FAFAFA;
+  --grey: #F0F0F0;
+  --grey-mid: #D0D0D0;
+  --text: #1A1A1A;
+  --text-mute: #555;
+  --success: #1A7F3C;
+  --shadow: rgba(0,0,0,.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+@media(prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } *{ transition-duration:.001ms!important; animation-duration:.001ms!important; } }
+
+body{
+  font-family: 'Barlow', 'Segoe UI', sans-serif;
+  background: var(--white);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+
+/* ---- hero ---- */
+.hero{
+  background: var(--yellow);
+  text-align: center;
+  padding: 36px 24px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 18px,
+    rgba(0,0,0,.03) 18px,
+    rgba(0,0,0,.03) 36px
+  );
+  pointer-events: none;
+}
+.hero-inner{ position: relative; z-index: 1; max-width: 560px; margin: 0 auto; }
+
+.brand{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  color: var(--yellow);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.brand svg{ width:16px; height:16px; }
+
+.hero h1{
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: clamp(52px, 14vw, 80px);
+  line-height: .92;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  margin-bottom: 14px;
+  text-shadow: 3px 3px 0 rgba(0,0,0,.12);
+}
+.hero h1 em{
+  font-style: normal;
+  color: var(--red);
+  display: block;
+  -webkit-text-stroke: 2px var(--ink);
+  text-stroke: 2px var(--ink);
+}
+
+.hero-sub{
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 6vw, 30px);
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  background: var(--red);
+  color: var(--white);
+  display: inline-block;
+  padding: 6px 20px 8px;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  transform: rotate(-1deg);
+}
+
+.hero-promise{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  letter-spacing: .02em;
+}
+.badge svg{ width:14px; height:14px; color: var(--yellow); flex:none; }
+
+/* ---- form section ---- */
+.form-section{
+  background: var(--grey);
+  padding: 0 16px 60px;
+}
+
+.form-card{
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px var(--shadow);
+  max-width: 580px;
+  margin: 0 auto;
+  transform: translateY(-28px);
+  overflow: hidden;
+}
+
+.form-card-head{
+  background: var(--red);
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.form-card-head svg{ width: 28px; height: 28px; color: var(--white); flex: none; }
+.form-card-head h2{
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.1;
+}
+.form-card-head p{
+  font-size: 13px;
+  color: rgba(255,255,255,.8);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+form{ padding: 28px 28px 32px; }
+
+.form-row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.form-group{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.form-group.full{ grid-column: 1 / -1; }
+
+label{
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: .01em;
+}
+label .req{ color: var(--red); margin-left: 2px; }
+
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+textarea,
+select{
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--grey-mid);
+  border-radius: 5px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--white);
+  transition: border-color .2s ease, box-shadow .2s ease;
+  outline: none;
+  -webkit-appearance: none;
+}
+input:focus, textarea:focus, select:focus{
+  border-color: var(--yellow-dark);
+  box-shadow: 0 0 0 3px rgba(250,200,16,.22);
+}
+textarea{ resize: vertical; min-height: 90px; }
+
+/* price input wrapper */
+.price-wrap{ position: relative; }
+.price-wrap input{ padding-left: 38px; }
+.price-prefix{
+  position: absolute;
+  left: 13px; top: 50%;
+  transform: translateY(-50%);
+  font-weight: 700;
+  color: var(--text-mute);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* file upload */
+.file-drop{
+  border: 2px dashed var(--grey-mid);
+  border-radius: 6px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease;
+  position: relative;
+}
+.file-drop:hover, .file-drop.is-over{
+  border-color: var(--yellow-dark);
+  background: rgba(250,200,16,.06);
+}
+.file-drop input[type="file"]{
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.file-drop svg{ width: 32px; height: 32px; color: var(--yellow-dark); margin: 0 auto 8px; }
+.file-drop .drop-label{
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+.file-drop .drop-sub{
+  font-size: 12px;
+  color: var(--text-mute);
+  margin-top: 4px;
+}
+.file-preview{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.file-thumb{
+  width: 72px; height: 72px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 2px solid var(--grey-mid);
+}
+.file-count{
+  font-size: 13px;
+  color: var(--success);
+  font-weight: 600;
+  margin-top: 8px;
+  display: none;
+}
+
+/* submit */
+.btn-submit{
+  width: 100%;
+  padding: 17px 24px;
+  background: var(--red);
+  color: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .2s ease, transform .15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+.btn-submit:hover{ background: var(--red-dark); transform: translateY(-1px); }
+.btn-submit:active{ transform: translateY(0); }
+.btn-submit svg{ width: 22px; height: 22px; }
+.btn-submit.is-loading{ opacity: .7; pointer-events: none; }
+
+.form-legal{
+  font-size: 12px;
+  color: var(--text-mute);
+  text-align: center;
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+/* success state */
+.success-box{
+  display: none;
+  padding: 40px 28px;
+  text-align: center;
+}
+.success-box svg{
+  width: 56px; height: 56px;
+  color: var(--success);
+  margin: 0 auto 16px;
+}
+.success-box h3{
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 28px;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.success-box p{ color: var(--text-mute); font-size: 15px; }
+
+/* ---- trust bar ---- */
+.trust{
+  background: var(--ink);
+  padding: 28px 24px;
+}
+.trust-inner{
+  max-width: 580px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  text-align: center;
+}
+.trust-item svg{ width: 28px; height: 28px; color: var(--yellow); margin: 0 auto 8px; }
+.trust-item strong{
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+.trust-item span{ font-size: 12px; color: rgba(255,255,255,.55); }
+
+/* ---- footer ---- */
+.site-footer{
+  background: var(--yellow);
+  padding: 22px 24px;
+  text-align: center;
+  border-top: 4px solid var(--ink);
+}
+.footer-contacts{
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.footer-contacts a{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.footer-contacts a svg{ width: 18px; height: 18px; }
+.footer-copy{ font-size: 12px; color: rgba(0,0,0,.5); }
+
+/* ---- error states ---- */
+input.is-error, textarea.is-error{ border-color: var(--red); }
+.error-msg{ font-size: 12px; color: var(--red); font-weight: 600; display: none; }
+.error-msg.visible{ display: block; }
+
+/* ---- responsive ---- */
+@media(max-width: 520px){
+  .form-row{ grid-template-columns: 1fr; }
+  form{ padding: 22px 18px 26px; }
+  .form-card-head{ padding: 16px 18px; }
+  .trust-inner{ grid-template-columns: 1fr; gap: 16px; }
+  .footer-contacts{ flex-direction: column; gap: 12px; }
+}
+
+a:focus-visible, button:focus-visible{ outline: 3px solid var(--yellow-dark); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Szuper Autófelvásárlás
+    </div>
+
+    <h1>Eladnád?<em>Mi visszük!</em></h1>
+    <div class="hero-sub">Azonnali ajánlat — ingyen!</div>
+
+    <div class="hero-promise">
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Gyors értékelés
+      </span>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Készpénzes fizetés
+      </span>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Adminisztráció nélkül
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FORM ===================== -->
+<section class="form-section">
+  <div class="form-card">
+    <div class="form-card-head">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+      <div>
+        <h2>Töltsd ki az adatlapot</h2>
+        <p>2 perc alatt beküldöd — mi felvesszük veled a kapcsolatot</p>
+      </div>
+    </div>
+
+    <form id="carForm" novalidate>
+      <!-- Web3Forms access key — cseréld ki a sajátodra! -->
+      <input type="hidden" name="access_key" value="a08bd9d9-80fe-4532-8f00-2b79ac46663f">
+      <input type="hidden" name="subject" value="Új autóajánlat — Szuper Autófelvásárlás">
+      <input type="hidden" name="from_name" value="Szuper Autófelvásárlás weboldal">
+      <input type="hidden" name="redirect" value="false">
+
+      <div class="form-group">
+        <label for="tel">Telefonszám <span class="req">*</span></label>
+        <input type="tel" id="tel" name="telefon" placeholder="06 30 123 4567" autocomplete="tel" required>
+        <span class="error-msg" id="tel-err">Kérjük add meg a telefonszámodat.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="allapot">Az autóról tudnivalók <span class="req">*</span></label>
+        <textarea id="allapot" name="leiras" placeholder="Márka, típus, évjárat, km-állás, állapot, esetleges hibák..." style="min-height:150px;" required></textarea>
+        <span class="error-msg" id="allapot-err">Kérjük írd le az autó adatait.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Fényképek <span class="req">*</span></label>
+        <div class="file-drop" id="fileDrop">
+          <input type="file" id="kepek" name="kepek" accept="image/*" multiple required>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div class="drop-label">Kattints ide a képek kiválasztásához</div>
+          <div class="drop-sub">JPG, PNG — max. 10 MB / kép</div>
+        </div>
+        <div class="file-preview" id="filePreview"></div>
+        <div class="file-count" id="fileCount"></div>
+        <span class="error-msg" id="kep-err">Kérjük tölts fel legalább 1 képet.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="ar">Elképzelt ár <span class="req">*</span></label>
+        <div class="price-wrap">
+          <span class="price-prefix">Ft</span>
+          <input type="number" id="ar" name="elvart_ar" placeholder="pl. 1800000" min="0" required>
+        </div>
+        <span class="error-msg" id="ar-err">Kérjük add meg az elvárt árat.</span>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Ajánlatot kérek!
+      </button>
+
+      <p class="form-legal">Az adataidat bizalmasan kezeljük, kizárólag az ajánlatadás céljából használjuk fel.</p>
+    </form>
+
+    <div class="success-box" id="successBox">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <h3>Megkaptuk az ajánlatkérésedet!</h3>
+      <p>Hamarosan felvesszük veled a kapcsolatot.<br>Köszönjük a bizalmat!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TRUST ===================== -->
+<section class="trust">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+      <strong>Gyors visszajelzés</strong>
+      <span>Néhány órán belül hívunk</span>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><path d="M12 12v3"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+      <strong>Biztonságos ügylet</strong>
+      <span>Papírozás nélkül, készpénzben</span>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <strong>Több száz vevő</strong>
+      <span>Elégedett ügyfelek Magyarországon</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="footer-contacts">
+    <a href="tel:+36703044113">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 3.5c1 0 1.9.6 2.3 1.6l.7 1.7c.3.8.1 1.7-.5 2.3l-1 1c1 2.3 2.8 4.1 5.1 5.1l1-1c.6-.6 1.5-.8 2.3-.5l1.7.7c1 .4 1.6 1.3 1.6 2.3v1.8c0 1.3-1.1 2.3-2.4 2.1-8-1.1-13.8-6.9-14.9-14.9C3.2 4.6 4.2 3.5 5.5 3.5h2Z"/></svg>
+      06 70 304 4113
+    </a>
+    <a href="mailto:expresszautovetel@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      expresszautovetel@gmail.com
+    </a>
+  </div>
+  <p class="footer-copy">© 2026 Szuper Autófelvásárlás — Minden jog fenntartva</p>
+</footer>
+
+<script>
+// ---- file preview ----
+var fileInput = document.getElementById("kepek");
+var preview   = document.getElementById("filePreview");
+var countEl   = document.getElementById("fileCount");
+var fileDrop  = document.getElementById("fileDrop");
+
+fileInput.addEventListener("change", function(){
+  preview.innerHTML = "";
+  var files = Array.from(this.files);
+  files.slice(0,6).forEach(function(f){
+    if(!f.type.startsWith("image/")) return;
+    var img = document.createElement("img");
+    img.className = "file-thumb";
+    img.src = URL.createObjectURL(f);
+    preview.appendChild(img);
+  });
+  if(files.length){
+    countEl.textContent = files.length + " kép kiválasztva";
+    countEl.style.display = "block";
+  }
+  document.getElementById("kep-err").classList.remove("visible");
+});
+
+["dragover","dragenter"].forEach(function(ev){
+  fileDrop.addEventListener(ev, function(e){ e.preventDefault(); fileDrop.classList.add("is-over"); });
+});
+["dragleave","drop"].forEach(function(ev){
+  fileDrop.addEventListener(ev, function(){ fileDrop.classList.remove("is-over"); });
+});
+
+// ---- form validation & submit ----
+var form      = document.getElementById("carForm");
+var submitBtn = document.getElementById("submitBtn");
+var successBox= document.getElementById("successBox");
+
+function validateField(id, errId){
+  var el  = document.getElementById(id);
+  var err = document.getElementById(errId);
+  if(!el.value.trim()){
+    el.classList.add("is-error");
+    err.classList.add("visible");
+    return false;
+  }
+  el.classList.remove("is-error");
+  err.classList.remove("visible");
+  return true;
+}
+
+form.addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  var ok = true;
+  ok = validateField("tel","tel-err") && ok;
+  ok = validateField("allapot","allapot-err") && ok;
+  ok = validateField("ar","ar-err") && ok;
+
+  if(!fileInput.files.length){
+    document.getElementById("kep-err").classList.add("visible");
+    ok = false;
+  }
+
+  if(!ok){
+    form.querySelector(".is-error").scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+
+  submitBtn.classList.add("is-loading");
+  submitBtn.textContent = "Küldés folyamatban...";
+
+  // Build FormData — Web3Forms accepts multipart/form-data with attachments
+  var data = new FormData(form);
+
+  // Attach all selected images
+  Array.from(fileInput.files).forEach(function(f, i){
+    data.append("kep_" + (i+1), f, f.name);
+  });
+
+  try {
+    var res  = await fetch("https://api.web3forms.com/submit", { method:"POST", body: data });
+    var json = await res.json();
+
+    if(json.success){
+      form.style.display = "none";
+      successBox.style.display = "block";
+      document.querySelector(".form-card-head").style.background = "var(--success)";
+    } else {
+      throw new Error(json.message || "Hiba");
+    }
+  } catch(err){
+    alert("Hiba történt a küldés során. Kérjük hívjon minket közvetlenül: 06 70 304 4113");
+    submitBtn.classList.remove("is-loading");
+    submitBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Ajánlatot kérek!';
+  }
+});
+</script>
+</body>
+</html>
