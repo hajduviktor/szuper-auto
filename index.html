@@ -461,12 +461,9 @@ a:focus-visible, button:focus-visible{ outline: 3px solid var(--yellow-dark); ou
       </div>
     </div>
 
-    <form id="carForm" novalidate>
-      <!-- Web3Forms access key — cseréld ki a sajátodra! -->
-      <input type="hidden" name="access_key" value="a08bd9d9-80fe-4532-8f00-2b79ac46663f">
-      <input type="hidden" name="subject" value="Új autóajánlat — Szuper Autófelvásárlás">
-      <input type="hidden" name="from_name" value="Szuper Autófelvásárlás weboldal">
-      <input type="hidden" name="redirect" value="false">
+    <form id="carForm" name="autofelvásárlás" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" enctype="multipart/form-data" novalidate>
+      <input type="hidden" name="form-name" value="autofelvásárlás">
+      <input type="hidden" name="bot-field" style="display:none">
 
       <div class="form-group">
         <label for="tel">Telefonszám <span class="req">*</span></label>
@@ -624,24 +621,23 @@ form.addEventListener("submit", async function(e){
   submitBtn.classList.add("is-loading");
   submitBtn.textContent = "Küldés folyamatban...";
 
-  // Build FormData — Web3Forms accepts multipart/form-data with attachments
-  var data = new FormData(form);
-
-  // Attach all selected images
-  Array.from(fileInput.files).forEach(function(f, i){
-    data.append("kep_" + (i+1), f, f.name);
-  });
-
   try {
-    var res  = await fetch("https://api.web3forms.com/submit", { method:"POST", body: data });
-    var json = await res.json();
+    var data = new FormData(form);
+    Array.from(fileInput.files).forEach(function(f, i){
+      data.append("kep_" + (i+1), f, f.name);
+    });
 
-    if(json.success){
+    var res = await fetch("/", {
+      method: "POST",
+      body: data
+    });
+
+    if(res.ok){
       form.style.display = "none";
       successBox.style.display = "block";
       document.querySelector(".form-card-head").style.background = "var(--success)";
     } else {
-      throw new Error(json.message || "Hiba");
+      throw new Error("Hiba");
     }
   } catch(err){
     alert("Hiba történt a küldés során. Kérjük hívjon minket közvetlenül: 06 70 304 4113");
