@@ -444,7 +444,7 @@ a:focus-visible, button:focus-visible{ outline: 3px solid var(--yellow-dark); ou
       </span>
       <span class="badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        Adminisztráció nélkül
+        Papírozás nélkül
       </span>
     </div>
   </div>
@@ -477,18 +477,6 @@ a:focus-visible, button:focus-visible{ outline: 3px solid var(--yellow-dark); ou
         <span class="error-msg" id="allapot-err">Kérjük írd le az autó adatait.</span>
       </div>
 
-      <div class="form-group">
-        <label>Fényképek <span class="req">*</span></label>
-        <div class="file-drop" id="fileDrop">
-          <input type="file" id="kepek" name="kepek" accept="image/*" multiple required>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <div class="drop-label">Kattints ide a képek kiválasztásához</div>
-          <div class="drop-sub">JPG, PNG — max. 10 MB / kép</div>
-        </div>
-        <div class="file-preview" id="filePreview"></div>
-        <div class="file-count" id="fileCount"></div>
-        <span class="error-msg" id="kep-err">Kérjük tölts fel legalább 1 képet.</span>
-      </div>
 
       <div class="form-group">
         <label for="ar">Elképzelt ár <span class="req">*</span></label>
@@ -505,6 +493,7 @@ a:focus-visible, button:focus-visible{ outline: 3px solid var(--yellow-dark); ou
       </button>
 
       <p class="form-legal">Az adataidat bizalmasan kezeljük, kizárólag az ajánlatadás céljából használjuk fel.</p>
+      <p class="form-legal" style="margin-top:10px;color:var(--text);font-weight:600;">📸 Képeket Viberen várjuk: <a href="viber://chat?number=36703044113" style="color:var(--red);">+36 70 304 4113</a></p>
     </form>
 
     <div class="success-box" id="successBox">
@@ -526,7 +515,7 @@ a:focus-visible, button:focus-visible{ outline: 3px solid var(--yellow-dark); ou
     <div class="trust-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><path d="M12 12v3"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
       <strong>Biztonságos ügylet</strong>
-      <span>Papírozás nélkül, készpénzben</span>
+      <span>Hivatalos papírozással, készpénzben</span>
     </div>
     <div class="trust-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -553,35 +542,6 @@ a:focus-visible, button:focus-visible{ outline: 3px solid var(--yellow-dark); ou
 
 <script>
 // ---- file preview ----
-var fileInput = document.getElementById("kepek");
-var preview   = document.getElementById("filePreview");
-var countEl   = document.getElementById("fileCount");
-var fileDrop  = document.getElementById("fileDrop");
-
-fileInput.addEventListener("change", function(){
-  preview.innerHTML = "";
-  var files = Array.from(this.files);
-  files.slice(0,6).forEach(function(f){
-    if(!f.type.startsWith("image/")) return;
-    var img = document.createElement("img");
-    img.className = "file-thumb";
-    img.src = URL.createObjectURL(f);
-    preview.appendChild(img);
-  });
-  if(files.length){
-    countEl.textContent = files.length + " kép kiválasztva";
-    countEl.style.display = "block";
-  }
-  document.getElementById("kep-err").classList.remove("visible");
-});
-
-["dragover","dragenter"].forEach(function(ev){
-  fileDrop.addEventListener(ev, function(e){ e.preventDefault(); fileDrop.classList.add("is-over"); });
-});
-["dragleave","drop"].forEach(function(ev){
-  fileDrop.addEventListener(ev, function(){ fileDrop.classList.remove("is-over"); });
-});
-
 // ---- form validation & submit ----
 var form      = document.getElementById("carForm");
 var submitBtn = document.getElementById("submitBtn");
@@ -608,11 +568,6 @@ form.addEventListener("submit", async function(e){
   ok = validateField("allapot","allapot-err") && ok;
   ok = validateField("ar","ar-err") && ok;
 
-  if(!fileInput.files.length){
-    document.getElementById("kep-err").classList.add("visible");
-    ok = false;
-  }
-
   if(!ok){
     form.querySelector(".is-error").scrollIntoView({behavior:"smooth", block:"center"});
     return;
@@ -623,10 +578,6 @@ form.addEventListener("submit", async function(e){
 
   try {
     var data = new FormData(form);
-    Array.from(fileInput.files).forEach(function(f, i){
-      data.append("kep_" + (i+1), f, f.name);
-    });
-
     var res = await fetch("/", {
       method: "POST",
       body: data
