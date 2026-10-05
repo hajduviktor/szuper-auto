@@ -478,19 +478,6 @@ a:focus-visible, button:focus-visible{ outline: 3px solid var(--yellow-dark); ou
       </div>
 
       <div class="form-group">
-        <label>Fényképek <span class="req">*</span></label>
-        <div class="file-drop" id="fileDrop">
-          <input type="file" id="kepek" name="kepek" accept="image/*" multiple required>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <div class="drop-label">Kattints ide a képek kiválasztásához</div>
-          <div class="drop-sub">JPG, PNG — max. 10 MB / kép</div>
-        </div>
-        <div class="file-preview" id="filePreview"></div>
-        <div class="file-count" id="fileCount"></div>
-        <span class="error-msg" id="kep-err">Kérjük tölts fel legalább 1 képet.</span>
-      </div>
-
-      <div class="form-group">
         <label for="ar">Elképzelt ár <span class="req">*</span></label>
         <div class="price-wrap">
           <span class="price-prefix">Ft</span>
@@ -552,36 +539,6 @@ a:focus-visible, button:focus-visible{ outline: 3px solid var(--yellow-dark); ou
 </footer>
 
 <script>
-// ---- file preview ----
-var fileInput = document.getElementById("kepek");
-var preview   = document.getElementById("filePreview");
-var countEl   = document.getElementById("fileCount");
-var fileDrop  = document.getElementById("fileDrop");
-
-fileInput.addEventListener("change", function(){
-  preview.innerHTML = "";
-  var files = Array.from(this.files);
-  files.slice(0,6).forEach(function(f){
-    if(!f.type.startsWith("image/")) return;
-    var img = document.createElement("img");
-    img.className = "file-thumb";
-    img.src = URL.createObjectURL(f);
-    preview.appendChild(img);
-  });
-  if(files.length){
-    countEl.textContent = files.length + " kép kiválasztva";
-    countEl.style.display = "block";
-  }
-  document.getElementById("kep-err").classList.remove("visible");
-});
-
-["dragover","dragenter"].forEach(function(ev){
-  fileDrop.addEventListener(ev, function(e){ e.preventDefault(); fileDrop.classList.add("is-over"); });
-});
-["dragleave","drop"].forEach(function(ev){
-  fileDrop.addEventListener(ev, function(){ fileDrop.classList.remove("is-over"); });
-});
-
 // ---- form validation & submit ----
 var form      = document.getElementById("carForm");
 var submitBtn = document.getElementById("submitBtn");
@@ -608,11 +565,6 @@ form.addEventListener("submit", async function(e){
   ok = validateField("allapot","allapot-err") && ok;
   ok = validateField("ar","ar-err") && ok;
 
-  if(!fileInput.files.length){
-    document.getElementById("kep-err").classList.add("visible");
-    ok = false;
-  }
-
   if(!ok){
     form.querySelector(".is-error").scrollIntoView({behavior:"smooth", block:"center"});
     return;
@@ -623,9 +575,6 @@ form.addEventListener("submit", async function(e){
 
   try {
     var data = new FormData(form);
-    Array.from(fileInput.files).forEach(function(f, i){
-      data.append("kep_" + (i+1), f, f.name);
-    });
 
     var res = await fetch("/", {
       method: "POST",
